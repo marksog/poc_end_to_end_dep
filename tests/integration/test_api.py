@@ -97,3 +97,16 @@ class TestDeleteItem:
     def test_delete_nonexistent_item(self, client):
         response = client.delete("/api/items/does-not-exist")
         assert response.status_code == 404
+
+class TestUpdateItem:
+    """Tests for PATCH /api/items/{id}."""
+
+    def test_update_status(self, client, created_item):
+        item_id = created_item["id"]
+        response = client.patch(f"/api/items/{item_id}?status=inactive")
+        assert response.status_code == 200
+        assert response.json()["status"] == "inactive"
+
+    def test_update_nonexistent_item(self, client):
+        response = client.patch("/api/items/fake-id?status=inactive")
+        assert response.status_code == 404

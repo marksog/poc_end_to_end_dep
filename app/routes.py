@@ -51,3 +51,12 @@ def delete_item(item_id: str) -> None:
     if item_id not in _items:
         raise HTTPException(status_code=404, detail=f"Item {item_id} not found")
     del _items[item_id]
+
+@router.patch("/items/{item_id}", response_model=ItemResponse)
+def update_item_status(item_id: str, status: ItemStatus) -> ItemResponse:
+    if item_id not in _items:
+        raise HTTPException(status_code=404, detail=f"Item {item_id} not found")
+    item = _items[item_id]
+    updated = item.model_copy(update={"status": status})
+    _items[item_id] = updated
+    return updated
