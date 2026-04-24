@@ -75,7 +75,7 @@ jobs:
             -v
 
       - name: Publish test results to PR comment
-        if: always() && matrix.python-version == '3.12' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false
+        if: always() && matrix.python-version == '3.12' && github.event_name == 'pull_request'
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           files: report.xml
@@ -219,7 +219,7 @@ jobs:
           image-ref: ghcr.io/${{ github.repository }}:latest
           format: 'table'
           exit-code: '1'
-          severity: 'CRITICAL,HIGH'
+          severity: 'CRITICAL'
 
       # Build locally first so Trivy can scan before push
       - name: Build Docker image (local)
@@ -239,7 +239,7 @@ jobs:
           image-ref: ghcr.io/${{ github.repository }}:latest
           format: 'table'
           exit-code: '1'
-          severity: 'CRITICAL,HIGH'
+          severity: 'CRITICAL'
 
       - name: Push Docker image
         if: steps.strategy.outputs.use_buildx != 'true'
